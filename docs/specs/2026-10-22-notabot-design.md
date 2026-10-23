@@ -43,7 +43,7 @@ Todas as linhas de um pedido precisam ter os mesmos `data_emissao`, `cliente_nom
 
 ```
 notabot/
-├── api/   Spring Boot 3, Java 21, Maven (wrapper mvnw)
+├── api/   Spring Boot 4.1, Java 21, Maven (wrapper mvnw)
 └── web/   Next.js + TypeScript
 ```
 
