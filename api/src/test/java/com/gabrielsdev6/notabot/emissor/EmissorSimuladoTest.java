@@ -29,10 +29,6 @@ class EmissorSimuladoTest {
 	private static final Clock CLOCK = Clock.fixed(Instant.parse("2026-10-27T17:30:45Z"),
 			ZoneId.of("America/Sao_Paulo"));
 
-	/**
-	 * Uma versão das regras que não depende da tarefa 4: só rejeita duplicidade.
-	 * Assim estes testes passam mesmo antes da RegrasRejeicao ficar pronta.
-	 */
 	private static final RegrasRejeicao SO_DUPLICIDADE = new RegrasRejeicao(CLOCK) {
 		@Override
 		public Optional<Rejeicao> verificar(Nota nota, Set<String> pedidosAutorizados) {

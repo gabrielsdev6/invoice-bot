@@ -15,11 +15,6 @@ import com.gabrielsdev6.notabot.chave.DadosChave;
 import com.gabrielsdev6.notabot.chave.GeradorChaveAcesso;
 import com.gabrielsdev6.notabot.nota.Nota;
 
-/**
- * Faz o papel da SEFAZ: decide se autoriza (usando RegrasRejeicao), numera a nota,
- * gera a chave, o protocolo e o XML. Guarda os pedidos já autorizados enquanto a API
- * estiver rodando, então emitir o mesmo pedido duas vezes dá duplicidade.
- */
 public class EmissorSimulado implements Emissor {
 
 	private static final int SERIE = 1;
@@ -39,7 +34,6 @@ public class EmissorSimulado implements Emissor {
 		this.aleatorio = aleatorio;
 	}
 
-	/** synchronized: duas emissões ao mesmo tempo não podem pegar o mesmo número nem furar a duplicidade. */
 	@Override
 	public synchronized ResultadoEmissao emitir(Nota nota) {
 		Optional<Rejeicao> rejeicao = regras.verificar(nota, Collections.unmodifiableSet(pedidosAutorizados));
@@ -65,7 +59,6 @@ public class EmissorSimulado implements Emissor {
 				"Autorizado o uso da NF-e", chave, protocolo, agora, xml);
 	}
 
-	/** 15 dígitos, no formato da SEFAZ: 1 + cUF + ano(2) + sequencial(10). */
 	private String gerarProtocolo(OffsetDateTime agora, int numero) {
 		return String.format("1%02d%02d%010d", emitente.codigoUf(), agora.getYear() % 100, numero);
 	}

@@ -30,10 +30,6 @@ import com.gabrielsdev6.notabot.planilha.PlanilhaInvalidaException;
 import com.gabrielsdev6.notabot.planilha.ResultadoValidacao;
 import com.gabrielsdev6.notabot.planilha.ValidadorLinha;
 
-/**
- * O fluxo inteiro: planilha → linhas → validação → notas → emissão → XML/PDF/zip.
- * Tudo fica em memória: reiniciou a API, os lotes somem.
- */
 @Service
 public class LoteService {
 
@@ -88,7 +84,6 @@ public class LoteService {
 		return GeradorDanfe.gerar(emitida.nota(), emitida.resultado(), Emitente.FICTICIA);
 	}
 
-	/** XML + PDF de cada nota autorizada na última emissão do lote. */
 	byte[] zip(String loteId) {
 		Lote lote = buscarLote(loteId);
 		List<NotaEmitida> autorizadas = lote.resultados().stream()

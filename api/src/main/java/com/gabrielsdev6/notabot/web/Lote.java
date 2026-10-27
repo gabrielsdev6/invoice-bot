@@ -6,10 +6,6 @@ import com.gabrielsdev6.notabot.emissor.ResultadoEmissao;
 import com.gabrielsdev6.notabot.nota.Nota;
 import com.gabrielsdev6.notabot.planilha.ErroLinha;
 
-/**
- * Uma planilha enviada: as notas que saíram dela, os erros e, depois de emitir,
- * o resultado da última emissão.
- */
 class Lote {
 
 	private final String id;

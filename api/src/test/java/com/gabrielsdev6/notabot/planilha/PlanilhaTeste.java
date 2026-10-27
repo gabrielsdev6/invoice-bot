@@ -13,10 +13,6 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
-/**
- * Monta um .xlsx na memória pros testes. Cada valor vira uma célula do tipo certo:
- * String → texto, Number → número, LocalDate → data, null → célula vazia.
- */
 public final class PlanilhaTeste {
 
 	private final List<String> cabecalho;
@@ -34,13 +30,11 @@ public final class PlanilhaTeste {
 		return new PlanilhaTeste(List.of(colunas));
 	}
 
-	/** Valores na ordem das colunas. */
 	public PlanilhaTeste linha(Object... valores) {
 		linhas.add(java.util.Arrays.asList(valores));
 		return this;
 	}
 
-	/** Uma linha válida do pedido informado, com valores padrão. */
 	public PlanilhaTeste linhaValida(String pedido, String produto) {
 		return linha(pedido, LocalDate.of(2026, 10, 20), "Padaria Pão Quente", "11.222.333/0001-81", "SP",
 				produto, "Produto " + produto, "19052090", "5102", 2, 10.5);

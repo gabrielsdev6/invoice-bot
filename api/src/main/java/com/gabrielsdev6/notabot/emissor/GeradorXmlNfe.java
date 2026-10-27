@@ -20,20 +20,12 @@ import javax.xml.transform.stream.StreamSource;
 import com.gabrielsdev6.notabot.nota.ItemNota;
 import com.gabrielsdev6.notabot.nota.Nota;
 
-/**
- * Monta o XML da NF-e autorizada (nfeProc = NFe + protocolo) num subconjunto do layout 4.00.
- *
- * O que fica de fora de propósito: assinatura digital (Signature), endereço completo,
- * PIS/COFINS, pagamento e transporte detalhado. O suficiente pra entender a estrutura,
- * não pra validar no schema oficial.
- */
 public final class GeradorXmlNfe {
 
 	public static final String NAMESPACE = "http://www.portalfiscal.inf.br/nfe";
 
 	private static final DateTimeFormatter DATA_HORA = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ssXXX");
 
-	/** tpAmb 2 = homologação: nota de teste, sem valor fiscal. */
 	private static final String AMBIENTE_HOMOLOGACAO = "2";
 
 	private GeradorXmlNfe() {
@@ -60,13 +52,13 @@ public final class GeradorXmlNfe {
 			}
 			escreverTotal(x, nota);
 			x.writeStartElement("transp");
-			campo(x, "modFrete", "9"); // 9 = sem frete
+			campo(x, "modFrete", "9");
 			x.writeEndElement();
-			x.writeEndElement(); // infNFe
-			x.writeEndElement(); // NFe
+			x.writeEndElement();
+			x.writeEndElement();
 
 			escreverProtocolo(x, autorizacao);
-			x.writeEndElement(); // nfeProc
+			x.writeEndElement();
 			x.writeEndDocument();
 			x.close();
 		}
@@ -79,7 +71,7 @@ public final class GeradorXmlNfe {
 	private static void escreverIde(XMLStreamWriter x, Nota nota, Emitente emitente, DadosAutorizacao a)
 			throws XMLStreamException {
 		boolean mesmaUf = emitente.uf().equals(nota.cliente().uf());
-		boolean consumidorFinal = nota.cliente().documento().length() == 11; // CPF
+		boolean consumidorFinal = nota.cliente().documento().length() == 11;
 
 		x.writeStartElement("ide");
 		campo(x, "cUF", String.valueOf(emitente.codigoUf()));
@@ -89,13 +81,13 @@ public final class GeradorXmlNfe {
 		campo(x, "serie", "1");
 		campo(x, "nNF", String.valueOf(a.numero()));
 		campo(x, "dhEmi", DATA_HORA.format(a.emitidaEm()));
-		campo(x, "tpNF", "1"); // 1 = saída
-		campo(x, "idDest", mesmaUf ? "1" : "2"); // 1 = dentro do estado, 2 = interestadual
-		campo(x, "tpImp", "1"); // DANFE retrato
+		campo(x, "tpNF", "1");
+		campo(x, "idDest", mesmaUf ? "1" : "2");
+		campo(x, "tpImp", "1");
 		campo(x, "tpEmis", "1");
 		campo(x, "cDV", a.chave().substring(43));
 		campo(x, "tpAmb", AMBIENTE_HOMOLOGACAO);
-		campo(x, "finNFe", "1"); // nota normal
+		campo(x, "finNFe", "1");
 		campo(x, "indFinal", consumidorFinal ? "1" : "0");
 		campo(x, "procEmi", "0");
 		campo(x, "verProc", "notabot 0.1");
@@ -111,7 +103,7 @@ public final class GeradorXmlNfe {
 		campo(x, "UF", e.uf());
 		x.writeEndElement();
 		campo(x, "IE", e.inscricaoEstadual());
-		campo(x, "CRT", "1"); // 1 = Simples Nacional
+		campo(x, "CRT", "1");
 		x.writeEndElement();
 	}
 
@@ -123,7 +115,7 @@ public final class GeradorXmlNfe {
 		x.writeStartElement("enderDest");
 		campo(x, "UF", nota.cliente().uf());
 		x.writeEndElement();
-		campo(x, "indIEDest", "9"); // 9 = não contribuinte
+		campo(x, "indIEDest", "9");
 		x.writeEndElement();
 	}
 
@@ -145,19 +137,19 @@ public final class GeradorXmlNfe {
 		campo(x, "uTrib", "UN");
 		campo(x, "qTrib", decimal(item.quantidade(), 4));
 		campo(x, "vUnTrib", decimal(item.valorUnitario(), 2));
-		campo(x, "indTot", "1"); // entra no total da nota
+		campo(x, "indTot", "1");
 		x.writeEndElement();
 
 		x.writeStartElement("imposto");
 		x.writeStartElement("ICMS");
-		x.writeStartElement("ICMSSN102"); // Simples Nacional sem destaque de ICMS
-		campo(x, "orig", "0"); // 0 = nacional
+		x.writeStartElement("ICMSSN102");
+		campo(x, "orig", "0");
 		campo(x, "CSOSN", "102");
 		x.writeEndElement();
 		x.writeEndElement();
 		x.writeEndElement();
 
-		x.writeEndElement(); // det
+		x.writeEndElement();
 	}
 
 	private static void escreverTotal(XMLStreamWriter x, Nota nota) throws XMLStreamException {
@@ -197,7 +189,6 @@ public final class GeradorXmlNfe {
 		return valor.setScale(casas, RoundingMode.HALF_UP).toPlainString();
 	}
 
-	/** A NF-e de verdade vai numa linha só; aqui a gente indenta pra dar pra ler o arquivo. */
 	private static String indentar(String xml) {
 		try {
 			Transformer t = TransformerFactory.newInstance().newTransformer();

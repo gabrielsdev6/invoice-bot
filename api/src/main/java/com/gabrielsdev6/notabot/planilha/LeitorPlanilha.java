@@ -17,10 +17,6 @@ import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
 
-/**
- * Lê a primeira aba de um Excel e devolve cada linha como texto.
- * Não valida o conteúdo das células, só a estrutura (cabeçalho com as colunas certas).
- */
 public final class LeitorPlanilha {
 
 	private LeitorPlanilha() {
@@ -70,7 +66,6 @@ public final class LeitorPlanilha {
 		}
 	}
 
-	/** Índice da coluna → nome normalizado. Só guarda as colunas que o sistema conhece. */
 	private static Map<Integer, String> lerCabecalho(Row cabecalho) {
 		if (cabecalho == null) {
 			throw new PlanilhaInvalidaException("A primeira linha da planilha precisa ter os nomes das colunas.");
@@ -90,7 +85,6 @@ public final class LeitorPlanilha {
 		return colunas;
 	}
 
-	/** Converte a célula pra texto. Datas viram aaaa-mm-dd e números não ganham ".0" nem notação científica. */
 	private static String texto(Cell cell) {
 		if (cell == null) {
 			return "";

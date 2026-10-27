@@ -15,10 +15,6 @@ import com.gabrielsdev6.notabot.emissor.Emitente;
 import com.gabrielsdev6.notabot.emissor.RegrasRejeicao;
 import com.gabrielsdev6.notabot.planilha.ValidadorLinha;
 
-/**
- * Monta as peças do sistema. As classes de regra não sabem nada do Spring:
- * é aqui que elas recebem o relógio, o emitente etc.
- */
 @Configuration
 public class NotabotConfig implements WebMvcConfigurer {
 
@@ -42,7 +38,6 @@ public class NotabotConfig implements WebMvcConfigurer {
 		return new EmissorSimulado(regras, clock, Emitente.FICTICIA, RandomGenerator.getDefault());
 	}
 
-	/** Deixa o front em Next (localhost:3000) chamar a API e ler o nome dos arquivos baixados. */
 	@Override
 	public void addCorsMappings(CorsRegistry registry) {
 		registry.addMapping("/api/**")

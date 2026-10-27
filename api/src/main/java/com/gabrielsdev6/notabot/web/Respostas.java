@@ -8,10 +8,6 @@ import com.gabrielsdev6.notabot.emissor.StatusEmissao;
 import com.gabrielsdev6.notabot.nota.Nota;
 import com.gabrielsdev6.notabot.planilha.ErroLinha;
 
-/**
- * O formato do JSON que a API devolve. Fica separado dos records internos pra
- * gente poder mudar um sem quebrar o outro (o XML, por exemplo, não vai no JSON).
- */
 final class Respostas {
 
 	private Respostas() {

@@ -41,12 +41,12 @@ class DocumentoValidatorTest {
 
 		@ParameterizedTest
 		@ValueSource(strings = {
-				"529.982.247-24", // último dígito errado
-				"529.982.247-15", // primeiro DV errado
-				"111.111.111-11", // todos iguais
-				"000.000.000-00", // todos iguais
-				"5299822472", // 10 dígitos
-				"529982247250", // 12 dígitos
+				"529.982.247-24",
+				"529.982.247-15",
+				"111.111.111-11",
+				"000.000.000-00",
+				"5299822472",
+				"529982247250",
 				"abc" })
 		void invalidos(String cpf) {
 			assertThat(DocumentoValidator.isCpfValido(cpf)).isFalse();
@@ -71,12 +71,12 @@ class DocumentoValidatorTest {
 
 		@ParameterizedTest
 		@ValueSource(strings = {
-				"11.222.333/0001-80", // último dígito errado
-				"11.222.333/0001-91", // primeiro DV errado
-				"00.000.000/0000-00", // todos iguais
-				"22.222.222/2222-22", // todos iguais
-				"1122233300018", // 13 dígitos
-				"52998224725" }) // é um CPF, não CNPJ
+				"11.222.333/0001-80",
+				"11.222.333/0001-91",
+				"00.000.000/0000-00",
+				"22.222.222/2222-22",
+				"1122233300018",
+				"52998224725" })
 		void invalidos(String cnpj) {
 			assertThat(DocumentoValidator.isCnpjValido(cnpj)).isFalse();
 		}

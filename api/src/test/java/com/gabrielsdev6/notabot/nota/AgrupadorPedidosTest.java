@@ -76,7 +76,6 @@ class AgrupadorPedidosTest {
 
 	@Test
 	void arredondaOTotalDoItemPraDuasCasasHalfUp() {
-		// 3 × 3.335 = 10.005 → 10.01 (HALF_UP); 0.5 × 1.25 = 0.625 → 0.63
 		ResultadoAgrupamento r = AgrupadorPedidos.agrupar(List.of(
 				linha(2, "P1", "A", "3", "3.335"),
 				linha(3, "P1", "B", "0.5", "1.25")));
@@ -90,7 +89,6 @@ class AgrupadorPedidosTest {
 
 	@Test
 	void totalDaNotaNaoTemErroDeDouble() {
-		// com double, 0.1 + 0.2 dá 0.30000000000000004
 		ResultadoAgrupamento r = AgrupadorPedidos.agrupar(List.of(
 				linha(2, "P1", "A", "1", "0.10"),
 				linha(3, "P1", "B", "1", "0.20")));
@@ -140,7 +138,6 @@ class AgrupadorPedidosTest {
 
 	@Test
 	void produtosDiferentesNoMesmoPedidoNaoSaoErro() {
-		// só cliente e data precisam bater; produto, NCM e CFOP podem variar
 		LinhaPlanilha outroNcm = new LinhaPlanilha(3, "P1", DATA, "Padaria Pão Quente", "11222333000181", "SP",
 				"B", "Café", "09012100", "5101", BigDecimal.ONE, BigDecimal.TEN);
 

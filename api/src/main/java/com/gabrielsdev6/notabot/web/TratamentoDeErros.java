@@ -9,9 +9,6 @@ import org.springframework.web.multipart.support.MissingServletRequestPartExcept
 
 import com.gabrielsdev6.notabot.planilha.PlanilhaInvalidaException;
 
-/**
- * Transforma as exceções em respostas JSON { "mensagem": "..." } com o status certo.
- */
 @RestControllerAdvice
 class TratamentoDeErros {
 
@@ -33,7 +30,6 @@ class TratamentoDeErros {
 		return new Respostas.Erro("A planilha passou do limite de 5 MB.");
 	}
 
-	/** Os esqueletos das tarefas lançam UnsupportedOperationException("TODO: ...") até ficarem prontos. */
 	@ExceptionHandler(UnsupportedOperationException.class)
 	@ResponseStatus(HttpStatus.NOT_IMPLEMENTED)
 	Respostas.Erro naoImplementado(UnsupportedOperationException e) {

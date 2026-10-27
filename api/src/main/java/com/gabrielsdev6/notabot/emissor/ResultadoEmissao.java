@@ -2,12 +2,6 @@ package com.gabrielsdev6.notabot.emissor;
 
 import java.time.OffsetDateTime;
 
-/**
- * Resposta da SEFAZ (simulada) pra uma nota.
- *
- * @param codigo   cStat: 100 = autorizada; outro valor = código da rejeição
- * @param chave    só tem quando AUTORIZADA (o mesmo vale pra protocolo, autorizadaEm e xml)
- */
 public record ResultadoEmissao(
 		String pedido,
 		StatusEmissao status,

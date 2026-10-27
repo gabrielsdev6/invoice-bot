@@ -18,7 +18,6 @@ class ValidadorLinhaTest {
 
 	private static final ZoneId SAO_PAULO = ZoneId.of("America/Sao_Paulo");
 
-	// "hoje" = 27/10/2026
 	private final ValidadorLinha validador = new ValidadorLinha(
 			Clock.fixed(Instant.parse("2026-10-27T15:00:00Z"), SAO_PAULO));
 

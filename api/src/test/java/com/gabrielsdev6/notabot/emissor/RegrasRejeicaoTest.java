@@ -20,7 +20,6 @@ class RegrasRejeicaoTest {
 	private static final ZoneId SAO_PAULO = ZoneId.of("America/Sao_Paulo");
 	private static final LocalDate HOJE = LocalDate.of(2026, 10, 22);
 
-	// "hoje" fica congelado em 22/10/2026 pra todos os testes
 	private final RegrasRejeicao regras = new RegrasRejeicao(
 			Clock.fixed(HOJE.atStartOfDay(SAO_PAULO).plusHours(12).toInstant(), SAO_PAULO));
 

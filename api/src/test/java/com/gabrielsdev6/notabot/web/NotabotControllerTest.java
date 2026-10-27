@@ -44,10 +44,6 @@ class NotabotControllerTest {
 	@Autowired
 	private MockMvc mvc;
 
-	/**
-	 * As regras reais são a tarefa 4. Aqui elas são trocadas por uma versão que só
-	 * rejeita duplicidade, pra testar a API sem depender da tarefa.
-	 */
 	@MockitoBean
 	private RegrasRejeicao regras;
 
@@ -66,7 +62,6 @@ class NotabotControllerTest {
 		return new MockMultipartFile("arquivo", "vendas.xlsx", "application/octet-stream", p.bytes());
 	}
 
-	/** Pedidos únicos por teste: o emissor guarda os autorizados entre os testes (o contexto é o mesmo). */
 	private static String pedido(String sufixo) {
 		return Long.toString(System.nanoTime()) + "-" + sufixo;
 	}

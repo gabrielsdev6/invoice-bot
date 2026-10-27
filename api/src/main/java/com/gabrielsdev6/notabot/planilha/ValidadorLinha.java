@@ -25,17 +25,11 @@ import java.util.Set;
 
 import com.gabrielsdev6.notabot.validacao.DocumentoValidator;
 
-/**
- * Aplica as regras da planilha modelo em cada linha. Uma linha com qualquer erro
- * fica de fora; as outras saem normalizadas (documento só com dígitos, UF em
- * maiúsculas, NCM e CFOP sem pontos).
- */
 public class ValidadorLinha {
 
 	private static final Set<String> UFS = Set.of("AC", "AL", "AP", "AM", "BA", "CE", "DF", "ES", "GO", "MA", "MT",
 			"MS", "MG", "PA", "PB", "PR", "PE", "PI", "RJ", "RN", "RS", "RO", "RR", "SC", "SP", "SE", "TO");
 
-	// STRICT: sem isso, 31/02 vira 28/02 em silêncio
 	private static final DateTimeFormatter DATA_BR = DateTimeFormatter.ofPattern("dd/MM/uuuu")
 			.withResolverStyle(ResolverStyle.STRICT);
 
@@ -73,14 +67,13 @@ public class ValidadorLinha {
 		String produtoDescricao = c.obrigatorio(PRODUTO_DESCRICAO);
 		String ncm = c.digitos(NCM, 8);
 		String cfop = c.digitos(CFOP, 4);
-		BigDecimal quantidade = c.positivo(QUANTIDADE, 4); // a NF-e aceita até 4 casas na quantidade
+		BigDecimal quantidade = c.positivo(QUANTIDADE, 4);
 		BigDecimal valorUnitario = c.positivo(VALOR_UNITARIO, 2);
 
 		return new LinhaPlanilha(bruta.numeroLinha(), pedido, data, nome, documento, uf, produtoCodigo,
 				produtoDescricao, ncm, cfop, quantidade, valorUnitario);
 	}
 
-	/** Lê cada campo de uma linha e anota os erros. Os métodos devolvem null quando o campo é inválido. */
 	private final class Checador {
 
 		private final LinhaBruta bruta;
@@ -159,7 +152,6 @@ public class ValidadorLinha {
 			return uf;
 		}
 
-		/** Aceita com ou sem pontos (1905.20.90), mas tem que ter exatamente {@code tamanho} dígitos. */
 		String digitos(String campo, int tamanho) {
 			String valor = obrigatorio(campo);
 			if (valor == null) {
@@ -199,7 +191,6 @@ public class ValidadorLinha {
 
 	}
 
-	/** "1.234,56" → "1234.56"; "10,5" → "10.5"; "10.5" continua igual. */
 	static String normalizarNumero(String valor) {
 		String semEspaco = valor.replace(" ", "");
 		if (semEspaco.contains(",")) {

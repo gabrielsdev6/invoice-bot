@@ -29,6 +29,29 @@ Pra rodar tudo de uma vez: `./mvnw test`.
 
 Os caminhos são a partir de `api/src/main/java/com/gabrielsdev6/notabot/`.
 
+## Tarefa 4: `RegrasRejeicao`
+
+Decide se a SEFAZ (simulada) recusa a nota. A classe recebe um `Clock` no
+construtor: é assim que o teste finge que hoje é um dia fixo. Se você usar
+`LocalDate.now()` direto, o teste quebra com o tempo.
+
+**Regras**, nesta ordem (a primeira que bater é a que volta):
+
+1. O pedido já está em `pedidosAutorizados` →
+   `new Rejeicao(204, "Duplicidade de NF-e")`
+2. A data de emissão é de **mais** de 30 dias atrás →
+   `new Rejeicao(228, "Data de Emissão muito atrasada")`.
+   Exatamente 30 dias atrás ainda passa.
+3. Nenhuma das duas → `Optional.empty()` (a nota é autorizada).
+
+O método só **decide**. Quem coloca o pedido em `pedidosAutorizados` depois de
+autorizar é o `EmissorSimulado`, então não mexa no `Set`.
+
+**Dicas** (só leia se travar):
+- `LocalDate.now(clock)` dá o "hoje" do teste.
+- `LocalDate` tem `minusDays`, `isBefore` e `isAfter`.
+- `Optional.of(...)` quando tem rejeição, `Optional.empty()` quando não tem.
+
 ## Como ler um teste que falhou
 
 - `UnsupportedOperationException: TODO` → você ainda não implementou o método.

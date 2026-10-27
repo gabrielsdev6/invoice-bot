@@ -30,11 +30,6 @@ import com.gabrielsdev6.notabot.emissor.ResultadoEmissao;
 import com.gabrielsdev6.notabot.nota.ItemNota;
 import com.gabrielsdev6.notabot.nota.Nota;
 
-/**
- * Gera o PDF da DANFE (Documento Auxiliar da NF-e), a "nota impressa".
- * O layout é inspirado no oficial, mas bem mais simples: cabeçalho, código de barras
- * da chave, destinatário, itens e totais, com a marca d'água de homologação.
- */
 public final class GeradorDanfe {
 
 	private static final Locale PT_BR = Locale.of("pt", "BR");
@@ -84,7 +79,6 @@ public final class GeradorDanfe {
 	}
 
 	private static PdfPTable cabecalho(Nota nota, ResultadoEmissao r, Emitente emitente, PdfContentByte cb) {
-		// a coluna da chave precisa caber os 44 dígitos numa linha só
 		PdfPTable t = tabela(new float[] { 3.4f, 1.8f, 4.8f });
 
 		PdfPCell emit = celula();
@@ -182,7 +176,7 @@ public final class GeradorDanfe {
 		barras.setCode(chave);
 		barras.setBarHeight(28);
 		barras.setX(0.62f);
-		barras.setFont(null); // sem os números embaixo: a chave já aparece formatada logo abaixo
+		barras.setFont(null);
 		Image imagem = barras.createImageWithBarcode(cb, null, null);
 		imagem.setAlignment(Element.ALIGN_CENTER);
 		return imagem;
@@ -224,12 +218,10 @@ public final class GeradorDanfe {
 		return new Paragraph(" ", ROTULO);
 	}
 
-	/** 44 dígitos em grupos de 4, como na DANFE impressa. */
 	static String formatarChave(String chave) {
 		return chave.replaceAll("(\\d{4})(?=\\d)", "$1 ");
 	}
 
-	/** O número da nota está nas posições 25 a 33 da chave: 000.000.001 */
 	private static String numeroFormatado(String chave) {
 		String n = chave.substring(25, 34);
 		return n.substring(0, 3) + "." + n.substring(3, 6) + "." + n.substring(6);

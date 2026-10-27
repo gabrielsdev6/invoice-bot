@@ -14,15 +14,8 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
-/**
- * Gera o modelo.xlsx que a empresa baixa, preenche e manda de volta.
- */
 public final class ModeloPlanilha {
 
-	/**
-	 * Colunas guardadas como texto no Excel. Sem isso, o Excel apaga o zero da
-	 * esquerda de um CPF como 012.345.678-90 ou de um NCM como 09012100.
-	 */
 	private static final Set<String> COLUNAS_TEXTO = Set.of(ColunasPlanilha.PEDIDO, ColunasPlanilha.CLIENTE_DOCUMENTO,
 			ColunasPlanilha.PRODUTO_CODIGO, ColunasPlanilha.NCM, ColunasPlanilha.CFOP);
 
@@ -66,7 +59,6 @@ public final class ModeloPlanilha {
 				Cell cellData = row.createCell(1);
 				cellData.setCellValue(LocalDate.now());
 				cellData.setCellStyle(data);
-				// a data é a coluna 1; os exemplos começam no pedido (0) e pulam ela
 				for (int e = 0; e < exemplo.size(); e++) {
 					int coluna = e == 0 ? 0 : e + 1;
 					Cell cell = row.createCell(coluna);

@@ -119,7 +119,6 @@ class GeradorChaveAcessoTest {
 
 		@Test
 		void errosQueSeCompensamNoTamanhoNaoPassam() {
-			// CNPJ com 13 dígitos + cNF com 9: o total dá 43, mas os campos estão errados
 			DadosChave d = new DadosChave(35, YearMonth.of(2026, 10), "1122233300018", 1, 1, 123_456_789);
 			assertThatThrownBy(() -> GeradorChaveAcesso.gerar(d)).isInstanceOf(IllegalArgumentException.class);
 		}

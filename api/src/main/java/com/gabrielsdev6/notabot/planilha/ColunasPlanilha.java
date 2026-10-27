@@ -2,9 +2,6 @@ package com.gabrielsdev6.notabot.planilha;
 
 import java.util.List;
 
-/**
- * Nomes das colunas da planilha modelo, na ordem em que aparecem.
- */
 public final class ColunasPlanilha {
 
 	public static final String PEDIDO = "pedido";
