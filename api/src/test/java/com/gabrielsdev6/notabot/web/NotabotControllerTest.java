@@ -120,6 +120,18 @@ class NotabotControllerTest {
 	}
 
 	@Test
+	void zipContinuaComAsNotasDepoisDeUmaEmissaoRejeitada() throws Exception {
+		String lote = enviar(PlanilhaTeste.comColunasPadrao().linhaValida(pedido("r"), "A"));
+		mvc.perform(post("/api/lotes/{id}/emitir", lote));
+		mvc.perform(post("/api/lotes/{id}/emitir", lote)).andExpect(jsonPath("$.rejeitadas").value(1));
+
+		byte[] zip = mvc.perform(get("/api/lotes/{id}/zip", lote))
+				.andExpect(status().isOk())
+				.andReturn().getResponse().getContentAsByteArray();
+		assertThat(nomesNoZip(zip)).hasSize(2);
+	}
+
+	@Test
 	void baixaXmlPdfEZipDaNotaAutorizada() throws Exception {
 		String pedido = pedido("z");
 		String lote = enviar(PlanilhaTeste.comColunasPadrao().linhaValida(pedido, "A"));

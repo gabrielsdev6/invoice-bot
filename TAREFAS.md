@@ -25,7 +25,7 @@ Pra rodar tudo de uma vez: `./mvnw test`.
 | 1 | `validacao/DocumentoValidator` | `DocumentoValidatorTest` | métodos estáticos, String, laços, `char` → número | ✅ |
 | 2 | `chave/GeradorChaveAcesso` | `GeradorChaveAcessoTest` | `String.format`, validação com exceção, `YearMonth` | ✅ |
 | 3 | `nota/AgrupadorPedidos` | `AgrupadorPedidosTest` | `Map`, `List`, records, `BigDecimal` | ✅ |
-| 4 | `emissor/RegrasRejeicao` | `RegrasRejeicaoTest` | `Optional`, `LocalDate`, injeção de `Clock` | ⏳ |
+| 4 | `emissor/RegrasRejeicao` | `RegrasRejeicaoTest` | `Optional`, `LocalDate`, injeção de `Clock` | ✅ |
 
 Os caminhos são a partir de `api/src/main/java/com/gabrielsdev6/notabot/`.
 
@@ -68,7 +68,7 @@ autorizar é o `EmissorSimulado`, então não mexa no `Set`.
 
 ## Ver a API funcionando
 
-Com a tarefa 4 pronta, sobe a API (dentro de `notabot/api`):
+Sobe a API (dentro de `notabot/api`):
 
 ```bash
 .\mvnw.cmd spring-boot:run
@@ -84,9 +84,6 @@ curl.exe -X POST http://localhost:8090/api/lotes/COLE_O_LOTEID_AQUI/emitir
 curl.exe -o notas.zip http://localhost:8090/api/lotes/COLE_O_LOTEID_AQUI/zip
 ```
 
-O `.zip` tem o XML e a DANFE (PDF) de cada nota autorizada. Se emitir o mesmo
-lote duas vezes, a segunda vem com rejeição 204 (duplicidade), que é a sua
-tarefa 4 trabalhando.
-
-Antes da tarefa 4 ficar pronta, o `emitir` responde **501** com a mensagem
-`TODO: tarefa 4`.
+O `.zip` tem o XML e a DANFE (PDF) de cada nota autorizada no lote. Se emitir o
+mesmo lote duas vezes, a segunda vem com rejeição 204 (duplicidade), que é a
+tarefa 4 trabalhando, e o zip continua com as notas da primeira.

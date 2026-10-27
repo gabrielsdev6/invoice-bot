@@ -86,10 +86,7 @@ public class LoteService {
 
 	byte[] zip(String loteId) {
 		Lote lote = buscarLote(loteId);
-		List<NotaEmitida> autorizadas = lote.resultados().stream()
-				.filter(ResultadoEmissao::isAutorizada)
-				.map(r -> notasPorChave.get(r.chave()))
-				.toList();
+		List<NotaEmitida> autorizadas = lote.chavesAutorizadas().stream().map(notasPorChave::get).toList();
 		if (autorizadas.isEmpty()) {
 			throw new NaoEncontradoException("O lote " + loteId + " ainda não tem nenhuma nota autorizada.");
 		}

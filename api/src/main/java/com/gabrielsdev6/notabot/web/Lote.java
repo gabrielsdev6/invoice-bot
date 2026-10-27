@@ -1,6 +1,7 @@
 package com.gabrielsdev6.notabot.web;
 
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import com.gabrielsdev6.notabot.emissor.ResultadoEmissao;
 import com.gabrielsdev6.notabot.nota.Nota;
@@ -11,7 +12,7 @@ class Lote {
 	private final String id;
 	private final List<Nota> notas;
 	private final List<ErroLinha> erros;
-	private volatile List<ResultadoEmissao> resultados = List.of();
+	private final List<String> chavesAutorizadas = new CopyOnWriteArrayList<>();
 
 	Lote(String id, List<Nota> notas, List<ErroLinha> erros) {
 		this.id = id;
@@ -31,12 +32,16 @@ class Lote {
 		return erros;
 	}
 
-	List<ResultadoEmissao> resultados() {
-		return resultados;
+	List<String> chavesAutorizadas() {
+		return List.copyOf(chavesAutorizadas);
 	}
 
 	void registrar(List<ResultadoEmissao> resultados) {
-		this.resultados = List.copyOf(resultados);
+		for (ResultadoEmissao resultado : resultados) {
+			if (resultado.isAutorizada()) {
+				chavesAutorizadas.add(resultado.chave());
+			}
+		}
 	}
 
 }
