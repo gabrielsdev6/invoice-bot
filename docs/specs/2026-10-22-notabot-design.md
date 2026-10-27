@@ -71,11 +71,13 @@ Cada pacote tem uma responsabilidade e pode ser testado sozinho. 👤 = o Gabrie
 | `emissor.RegrasRejeicao` | devolve uma rejeição ou vazio. Casos: pedido que já tem nota autorizada (204, duplicidade de NF-e) e data de emissão com mais de 30 dias de atraso (228, data de emissão muito atrasada) | lista de pedidos já autorizados | 👤 |
 | `planilha.LeitorPlanilha` | lê o `.xlsx` com Apache POI e devolve as linhas com o número da linha | Apache POI | 🤖 |
 | `planilha.ValidadorLinha` | aplica as regras da planilha modelo e gera os erros | `DocumentoValidator` | 🤖 |
-| `emissor.Emissor` / `EmissorSimulado` | interface `emitir(Nota) → ResultadoEmissao`; o simulado gera o XML com JAXB, o protocolo e guarda os pedidos já autorizados (vale entre lotes, enquanto a API estiver rodando) | `chave`, `RegrasRejeicao` | 🤖 |
+| `emissor.Emissor` / `EmissorSimulado` | interface `emitir(Nota) → ResultadoEmissao`; o simulado gera o XML com StAX (`GeradorXmlNfe`, já vem no Java, sem dependência), o protocolo e guarda os pedidos já autorizados (vale entre lotes, enquanto a API estiver rodando) | `chave`, `RegrasRejeicao` | 🤖 |
 | `danfe.GeradorDanfe` | PDF com OpenPDF + código de barras Code128 da chave | OpenPDF | 🤖 |
 | `web.*` | controllers, `LoteService` (Map em memória), CORS para `localhost:3000`, `@RestControllerAdvice` | tudo acima | 🤖 |
 
-A numeração `nNF` é sequencial por execução da API e começa em 1. O `cNF` é aleatório, com 8 dígitos. A série é sempre 1.
+A numeração `nNF` é sequencial por execução da API e começa em 1. Nota rejeitada não gasta número. O `cNF` é aleatório, com 8 dígitos. A série é sempre 1.
+
+A emitente é fixa (`Emitente.FICTICIA`, CNPJ 11.444.777/0001-61, SP). O XML sai com `tpAmb` 2 (homologação) e a DANFE com a marca d'água "SEM VALOR FISCAL". A API roda na porta **8090**, porque a 8080 é do gym-university.
 
 ### Front (`web/`)
 
@@ -90,7 +92,9 @@ A numeração `nNF` é sequencial por execução da API e começa em 1. O `cNF` 
 
 - Arquivo que não é `.xlsx`, ou planilha sem as colunas obrigatórias → **400** com mensagem.
 - Erros de linha **não** bloqueiam o lote: as notas válidas seguem, as inválidas aparecem na pré-visualização e não são emitidas.
-- `loteId` ou `chave` que não existe → **404**.
+- `loteId` ou `chave` que não existe, ou zip de lote sem nota autorizada → **404**.
+- Planilha só com o cabeçalho → **400**. Arquivo acima de 5 MB → **413**.
+- Método de tarefa ainda com `TODO` (`UnsupportedOperationException`) → **501** com a mensagem do TODO.
 - Rejeição simulada da SEFAZ **não é erro HTTP**: aparece como `status: REJEITADA` com `codigo` e `motivo`.
 
 ## Testes
@@ -105,7 +109,7 @@ A numeração `nNF` é sequencial por execução da API e começa em 1. O `cNF` 
 2. 👤 `DocumentoValidator`.
 3. 👤 `GeradorChaveAcesso`.
 4. 👤 `AgrupadorPedidos`.
-5. 🤖 `LeitorPlanilha`, `ValidadorLinha`, `EmissorSimulado`, `GeradorDanfe`, API.
+5. 🤖 `LeitorPlanilha`, `ValidadorLinha`, `EmissorSimulado`, `GeradorDanfe`, API. Os testes dessas partes trocam a `RegrasRejeicao` por uma versão que só checa duplicidade, pra não depender da tarefa 4.
 6. 👤 `RegrasRejeicao`.
 7. 🤖 Projeto Next + `lib/api.ts`; 👤 as três telas.
 8. Revisão de cada parte 👤 com explicação das melhorias.
